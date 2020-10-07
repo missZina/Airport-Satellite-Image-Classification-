@@ -1,0 +1,15 @@
+# build model
+model = tf.keras.Sequential([
+  classifier,
+  layers.Dense(train_data.num_classes)
+])
+
+model.summary()
+model.compile(
+  optimizer=tf.keras.optimizers.Adam(),
+  loss=tf.keras.losses.CategoricalCrossentropy(from_logits=True),
+  metrics=['acc'])
+  
+  loss0, accuracy0 = model.evaluate(val_data)
+print("initial loss: {:.2f}".format(loss0))
+print("initial accuracy: {:.2f}".format(accuracy0))
