@@ -1,0 +1,57 @@
+val_loss, val_acc = model.evaluate(val_data)
+print("val loss: {:.2f}".format(val_loss))
+print("val accuracy: {:.2f}".format(val_acc))
+
+plt.figure()
+plt.title('Model Loss')
+plt.ylabel("Loss")
+plt.xlabel("Training Steps")
+plt.ylim([0,2])
+plt.plot(batch_stats_callback.batch_losses)
+plt.show()
+
+
+plt.figure()
+plt.title('Model Accuracy')
+plt.ylabel("Accuracy")
+plt.xlabel("Training Steps")
+plt.ylim([0,1])
+plt.plot(batch_stats_callback.batch_acc)
+plt.show()
+
+test_loss, test_acc = model.evaluate(test_data)
+print("test loss: {:.2f}".format(test_loss))
+print("test accuracy: {:.2f}".format(test_acc))
+
+test_pred = None
+test_true = None
+batch = None
+names_pred = None
+batch_len = test_data.__len__()
+
+for b in range(batch_len):
+    test_batch, test_label = next(test_data)
+
+    predicted_batch = model.predict(test_batch)
+    predicted_id = np.argmax(predicted_batch, axis=-1)
+    predicted_label = class_names[predicted_id]
+    label_id = np.argmax(test_label, axis=-1)
+    
+    if b>0:
+        test_pred = np.concatenate((test_pred, predicted_id), axis=0)
+        test_true = np.concatenate((test_true, label_id), axis=0)
+        batch = np.concatenate((batch, test_batch), axis=0)
+        names_pred = np.concatenate((names_pred, predicted_label), axis=0)
+    else:
+        test_pred = predicted_id
+        test_true = label_id
+        batch = test_batch
+        names_pred = predicted_label
+        
+        plt.figure(figsize=(15,9))
+plt.title('Predictions Test Data')
+plt.plot(test_pred, color='red', marker='o', linewidth=2, markersize=6)
+plt.plot(test_true, color='green', marker='o', linewidth=2, markersize=6)
+plt.xlabel('Image')
+plt.ylabel('Label')
+plt.show()
