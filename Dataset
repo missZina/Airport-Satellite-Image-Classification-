@@ -1,0 +1,14 @@
+import numpy as np
+import matplotlib.pylab as plt
+import PIL.Image as Image
+import tensorflow as tf
+from tensorflow.keras import layers
+import tensorflow_hub as hub
+train_path = '/content/drive/My Drive/Airport Dataset/Train'
+val_path = '/content/drive/My Drive/Airport Dataset/Validation'
+test_path = '/content/drive/My Drive/Airport Dataset/Validation'
+IMAGE_SHAPE = (224, 224)
+image_generator = tf.keras.preprocessing.image.ImageDataGenerator(rescale=1/255)
+train_data = image_generator.flow_from_directory(str(train_path), target_size=IMAGE_SHAPE)
+val_data = image_generator.flow_from_directory(str(val_path), target_size=IMAGE_SHAPE)
+test_data = image_generator.flow_from_directory(str(test_path), target_size=IMAGE_SHAPE)
